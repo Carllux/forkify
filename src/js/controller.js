@@ -11,3 +11,13 @@ const timeout = function (s) {
 // https://forkify-api.herokuapp.com/v2
 
 ///////////////////////////////////////
+
+// console.log('TEST_STRING');
+
+const showRecipe = async function() {
+  try {
+    
+  } catch (error) {
+    alert(error.message)
+  }
+}
