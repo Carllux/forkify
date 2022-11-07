@@ -1,4 +1,6 @@
-import { render } from 'sass';
+// import { render } from 'sass';
+import 'core-js/stable';
+import 'regenerator-runtime/runtime'
 import icons from '../img/icons.svg'
 const recipeContainer = document.querySelector('.recipe');
 console.log(icons)
@@ -16,27 +18,32 @@ const timeout = function (s) {
 ///////////////////////////////////////
 
 // console.log('TEST_STRING');
-const renderSpinner = function(parentEl) {
-const markup = `
+const renderSpinner = function (parentEl) {
+  const markup = `
 <div class="spinner">
   <svg>
     <use href="${icons}#icon-loader"></use>
   </svg>
 </div>`
-parentEl.innerHTML = '';
-parentEl.insertAdjacentHTML('afterbegin',markup)
+  parentEl.innerHTML = '';
+  parentEl.insertAdjacentHTML('afterbegin', markup)
 }
 
 
 const showRecipe = async function () {
   try {
+    const id = window.location.hash.slice(1)
+    console.log(id)
 
+    if(!id) return;
 
-renderSpinner(recipeContainer)
+    // loading recipe
+    renderSpinner(recipeContainer)
     const res = await fetch(
-      'https://forkify-api.herokuapp.com/api/v2/recipes/5ed6604591c37cdc054bc886'
+      `https://forkify-api.herokuapp.com/api/v2/recipes/${id}`
+      // `https://forkify-api.herokuapp.com/api/v2/recipes/5ed6604591c37cdc054bc886`
       // 'https://forkify-api.herokuapp.com/api/v2/recipes/5ed6604591c37cdc054bcc13'
-      );
+    );
 
     const data = await res.json();
     console.log(res, data)
@@ -153,4 +160,12 @@ renderSpinner(recipeContainer)
     alert(err)
   }
 }
-showRecipe()
+
+const windowEvents = ['hashchange', 'load']
+console.log(windowEvents)
+
+windowEvents.forEach(ev => window.addEventListener(ev, showRecipe))
+
+// window.addEventListener('hashchange', showRecipe)
+
+// window.addEventListener('load', showRecipe)
