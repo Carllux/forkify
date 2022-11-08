@@ -1,4 +1,5 @@
 // import { render } from 'sass';
+import * as model from './model.js';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime'
 import icons from '../img/icons.svg'
@@ -35,34 +36,38 @@ const showRecipe = async function () {
     const id = window.location.hash.slice(1)
     console.log(id)
 
-    if(!id) return;
+    if (!id) return;
 
     // loading recipe
+    await model.loadRecipe(id);
+    const { recipe } = model.state.recipe
+    // console.log(await model.loadRecipe(id))
     renderSpinner(recipeContainer)
-    const res = await fetch(
-      `https://forkify-api.herokuapp.com/api/v2/recipes/${id}`
-      // `https://forkify-api.herokuapp.com/api/v2/recipes/5ed6604591c37cdc054bc886`
-      // 'https://forkify-api.herokuapp.com/api/v2/recipes/5ed6604591c37cdc054bcc13'
-    );
 
-    const data = await res.json();
-    console.log(res, data)
+    // const res = await fetch(
+    //   `https://forkify-api.herokuapp.com/api/v2/recipes/${id}`
+    //   // `https://forkify-api.herokuapp.com/api/v2/recipes/5ed6604591c37cdc054bc886`
+    //   // 'https://forkify-api.herokuapp.com/api/v2/recipes/5ed6604591c37cdc054bcc13'
+    // );
 
-    if (!res.ok) throw new Error(`${data.message} (${res.status})`)
-    // let {recipe} = data.then(rec => console.log(rec));
-    let { recipe } = data.data;
+    // const data = await res.json();
+    // console.log(res, data)
 
-    recipe = {
-      id: recipe.id,
-      title: recipe.title,
-      publisher: recipe.publisher,
-      sourceUrl: recipe.source_url,
-      image: recipe.image_url,
-      servings: recipe.servings,
-      cookingTime: recipe.cooking_time,
-      ingredients: recipe.ingredients
-    }
-    console.log(recipe);
+    // if (!res.ok) throw new Error(`${data.message} (${res.status})`)
+    // // let {recipe} = data.then(rec => console.log(rec));
+    // let { recipe } = data.data;
+
+    // recipe = {
+    //   id: recipe.id,
+    //   title: recipe.title,
+    //   publisher: recipe.publisher,
+    //   sourceUrl: recipe.source_url,
+    //   image: recipe.image_url,
+    //   servings: recipe.servings,
+    //   cookingTime: recipe.cooking_time,
+    //   ingredients: recipe.ingredients
+    // }
+    // console.log(recipe);
 
 
     const markup = `        
@@ -165,7 +170,3 @@ const windowEvents = ['hashchange', 'load']
 console.log(windowEvents)
 
 windowEvents.forEach(ev => window.addEventListener(ev, showRecipe))
-
-// window.addEventListener('hashchange', showRecipe)
-
-// window.addEventListener('load', showRecipe)
