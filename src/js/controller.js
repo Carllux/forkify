@@ -40,7 +40,7 @@ const showRecipe = async function () {
 
     // loading recipe
     await model.loadRecipe(id);
-    const { recipe } = model.state.recipe
+    const recipe = model.state.recipe
     // console.log(await model.loadRecipe(id))
     renderSpinner(recipeContainer)
 

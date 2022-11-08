@@ -568,7 +568,7 @@ const showRecipe = async function() {
         if (!id) return;
         // loading recipe
         await _modelJs.loadRecipe(id);
-        const { recipe  } = _modelJs.state.recipe;
+        const recipe = _modelJs.state.recipe;
         // console.log(await model.loadRecipe(id))
         renderSpinner(recipeContainer);
         // const res = await fetch(
