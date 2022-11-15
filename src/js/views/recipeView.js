@@ -9,11 +9,12 @@ class RecipeView {
     render(data) {
         this.#data = data;
         const markup = this.#generateMarkup()
-        this.#clear;
+        this.#clear();
         this.#parentElement.insertAdjacentHTML('afterbegin', markup);
     }
+    
     #clear() {
-        innerHTML = '';
+        this.#parentElement.innerHTML = '';
     }
 
 
@@ -24,12 +25,12 @@ class RecipeView {
       <use href="${icons}#icon-loader"></use>
     </svg>
   </div>`
+  this.#clear();
         this.#parentElement.insertAdjacentHTML('afterbegin', markup)
-        this.#parentElement.innerHTML = '';
+        // this.#parentElement.innerHTML = '';
     }
 
     #generateMarkup() {
-        console.log('teste')
         return `        
         <figure class="recipe__fig">
           <img src="${this.#data.image}" alt="${this.#data.title}" class="recipe__img" />

@@ -1,14 +1,8 @@
-// import { render } from 'sass';
 import * as model from './model.js';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime'
 import recipeView from './views/recipeView.js';
 const recipeContainer = document.querySelector('.recipe');
-
-// console.log(icons)
-
-
-// https://forkify-api.herokuapp.com/v2
 
 ///////////////////////////////////////
 
@@ -18,12 +12,12 @@ const controlRecipes = async function () {
     console.log(id)
 
     if (!id) return;
+    // rendering loading spinner
     recipeView.renderSpinner()
 
     // loading recipe
     await model.loadRecipe(id);
 
-    // const recipe = model.state.recipe
     // rendering recipe
     recipeView.render(model.state.recipe)
 
@@ -34,6 +28,5 @@ const controlRecipes = async function () {
 }
 
 const windowEvents = ['hashchange', 'load']
-// console.log(windowEvents)
 
 windowEvents.forEach(ev => window.addEventListener(ev, controlRecipes))
