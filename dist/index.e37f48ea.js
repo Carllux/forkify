@@ -555,11 +555,10 @@ const controlRecipes = async function() {
         throw err;
     }
 };
-const windowEvents = [
-    "hashchange",
-    "load"
-];
-windowEvents.forEach((ev)=>window.addEventListener(ev, controlRecipes));
+const init = function() {
+    (0, _recipeViewJsDefault.default).addHandlerRender(controlRecipes);
+};
+init();
 
 },{"core-js/modules/web.immediate.js":"49tUX","./model.js":"Y4A21","regenerator-runtime/runtime":"dXNgZ","./views/recipeView.js":"l60JC","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"49tUX":[function(require,module,exports) {
 // TODO: Remove this module from `core-js@4` since it's split to modules listed below
@@ -2486,6 +2485,13 @@ class RecipeView {
           ${ing.description}
         </div>
       </li>`;
+    }
+    addHandlerRender(handler) {
+        const windowEvents = [
+            "hashchange",
+            "load"
+        ];
+        windowEvents.forEach((ev)=>window.addEventListener(ev, handler));
     }
 }
 exports.default = new RecipeView();
