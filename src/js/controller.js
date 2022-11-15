@@ -2,10 +2,10 @@ import * as model from './model.js';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime'
 import recipeView from './views/recipeView.js';
-const recipeContainer = document.querySelector('.recipe');
+
+// const recipeContainer = document.querySelector('.recipe');
 
 ///////////////////////////////////////
-
 const controlRecipes = async function () {
   try {
     const id = window.location.hash.slice(1)
