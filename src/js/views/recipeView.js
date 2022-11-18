@@ -1,36 +1,13 @@
 import icons from '../../img/icons.svg'
+import View from './View';
 import { fraction } from 'fractional'
 
-console.log(icons)
+// console.log(icons)
 // src\img
 class RecipeView {
     // private properties that all the views will have in common
     #parentElement = document.querySelector('.recipe')
     #data;
-
-    render(data) {
-        this.#data = data;
-        const markup = this.#generateMarkup()
-        this.#clear();
-        this.#parentElement.insertAdjacentHTML('afterbegin', markup);
-    }
-
-    #clear() {
-        this.#parentElement.innerHTML = '';
-    }
-
-
-    renderSpinner() {
-        const markup = `
-  <div class="spinner">
-    <svg>
-      <use href="${icons}#icon-loader"></use>
-    </svg>
-  </div>`
-        this.#clear();
-        this.#parentElement.insertAdjacentHTML('afterbegin', markup)
-        // this.#parentElement.innerHTML = '';
-    }
 
     #generateMarkup() {
         return `        
