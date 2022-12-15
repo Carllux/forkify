@@ -29,6 +29,7 @@ const controlRecipes = async function () {
   } catch (err) {
     throw err;
   }
+  // testing
   controlServings();
 
 }
@@ -69,7 +70,7 @@ const controlPagination = function (goToPage) {
 
 const controlServings = function () {
   // update the recipe servings(in state)
-  model.updateServings(1)
+  model.updateServings(4)
   // update the recipe view
   recipeView.render(model.state.recipe)
 

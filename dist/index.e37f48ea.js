@@ -560,6 +560,7 @@ const controlRecipes = async function() {
     } catch (err) {
         throw err;
     }
+    // testing
     controlServings();
 };
 const controlSearchResults = async function() {
@@ -589,7 +590,7 @@ const controlPagination = function(goToPage) {
 };
 const controlServings = function() {
     // update the recipe servings(in state)
-    _modelJs.updateServings(1);
+    _modelJs.updateServings(4);
     // update the recipe view
     (0, _recipeViewJsDefault.default).render(_modelJs.state.recipe);
 };
