@@ -573,16 +573,23 @@ const controlSearchResults = async function() {
         // render results
         console.log(_modelJs.state.search.results);
         // resultsView.render(model.state.search.results)
-        (0, _resultsViewJsDefault.default).render(_modelJs.getSearchResultsPage(2));
+        (0, _resultsViewJsDefault.default).render(_modelJs.getSearchResultsPage());
         // Render initial pagination buttons
         (0, _paginationViewJsDefault.default).render(_modelJs.state.search);
     } catch (error) {
         console.log(error);
     }
 };
+const controlPagination = function(goToPage) {
+    // resultsView.render(model.state.search.results)
+    (0, _resultsViewJsDefault.default).render(_modelJs.getSearchResultsPage(goToPage));
+    // Render initial pagination buttons
+    (0, _paginationViewJsDefault.default).render(_modelJs.state.search);
+};
 const init = function() {
     (0, _recipeViewJsDefault.default).addHandlerRender(controlRecipes);
     (0, _searchViewJsDefault.default).addHandlerSearch(controlSearchResults);
+    (0, _paginationViewJsDefault.default).addHandlerClick(controlPagination);
 };
 init();
 
@@ -1727,7 +1734,7 @@ const state = {
         query: "",
         results: [],
         resultsPerPage: (0, _config.RES_PER_PAGE),
-        page: 3
+        page: 1
     }
 };
 const loadRecipe = async function(id) {
@@ -1768,7 +1775,7 @@ const loadSearchResults = async function(query) {
     }
 };
 const getSearchResultsPage = function(page = state.search.page) {
-    // state.search.page = page
+    state.search.page = page;
     const start = (page - 1) * state.search.resultsPerPage;
     const end = page * state.search.resultsPerPage;
     return state.search.results.slice(start, end);
@@ -1783,7 +1790,7 @@ parcelHelpers.export(exports, "TIMEOUT_SEC", ()=>TIMEOUT_SEC);
 parcelHelpers.export(exports, "RES_PER_PAGE", ()=>RES_PER_PAGE);
 const API_URL = "https://forkify-api.herokuapp.com/api/v2/recipes/";
 const TIMEOUT_SEC = 10;
-const RES_PER_PAGE = 10;
+const RES_PER_PAGE = 100;
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
 exports.interopDefault = function(a) {
@@ -2944,38 +2951,49 @@ class PaginationView extends (0, _viewDefault.default) {
     _generateMarkup() {
         const currentPage = this._data.page;
         const numPages = Math.ceil(this._data.results.length / this._data.resultsPerPage);
-        console.log(numPages, "Number of pages");
-        console.log(currentPage, "Actuall page");
+        // console.log(numPages, 'Number of pages');
+        // console.log(currentPage, 'Actuall page');
         // Page 1, and there are other pages
-        if (currentPage === 1 && numPages > 1) return `<button class="btn--inline pagination__btn--next">
+        if (currentPage === 1 && numPages > 1) return `<button data-goto="${currentPage + 1}" class="btn--inline pagination__btn--next">
             <span>Page ${currentPage + 1}</span>
             <svg class="search__icon">
               <use href="${0, _iconsSvgDefault.default}#icon-arrow-right"></use>
             </svg>
           </button> `;
         // Last page
-        if (currentPage === numPages && numPages > 1) return `<button class="btn--inline pagination__btn--prev">
+        if (currentPage === numPages && numPages > 1) return `<button data-goto="${currentPage - 1}" class="btn--inline pagination__btn--prev">
             <svg class="search__icon">
               <use href="${0, _iconsSvgDefault.default}#icon-arrow-left"></use>
             </svg>
             <span>Page ${currentPage - 1}</span>
           </button>`;
         // Other page
-        if (currentPage < numPages) return `<button class="btn--inline pagination__btn--prev">
+        if (currentPage < numPages) return `<button data-goto="${currentPage - 1}" class="btn--inline pagination__btn--prev">
             <svg class="search__icon">
               <use href="${0, _iconsSvgDefault.default}#icon-arrow-left"></use>
             </svg>
             <span>Page ${currentPage - 1}</span>
           </button>
-          <button class="btn--inline pagination__btn--next">
+          <button data-goto="${currentPage + 1}" class="btn--inline pagination__btn--next">
             <span>Page ${currentPage + 1}</span>
             <svg class="search__icon">
               <use href="${0, _iconsSvgDefault.default}#icon-arrow-right"></use>
             </svg>
           </button> `;
         // Page 1, and there are NO other pages
-        return "Only 1 page";
+        return ``;
     }
+    addHandlerClick(handler) {
+        this._parentElement.addEventListener("click", function(e) {
+            // e.preventDefault();
+            const btn = e.target.closest(".btn--inline");
+            if (!btn) return;
+            const goToPage = +btn.dataset.goto;
+            console.log(goToPage, "page to go");
+            handler(goToPage);
+        });
+    }
+    _generateMarkupButton() {}
 }
 exports.default = new PaginationView();
 
