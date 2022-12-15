@@ -30,7 +30,7 @@ const controlRecipes = async function () {
     throw err;
   }
   // testing
-  controlServings();
+  // controlServings();
 
 }
 

@@ -560,8 +560,8 @@ const controlRecipes = async function() {
     } catch (err) {
         throw err;
     }
-    // testing
-    controlServings();
+// testing
+// controlServings();
 };
 const controlSearchResults = async function() {
     try {
@@ -2460,6 +2460,11 @@ class RecipeView extends (0, _viewDefault.default) {
     _parentElement = document.querySelector(".recipe");
     _errorMessage = "We couldn't find that recipe. Please try another one.";
     _message = "";
+    addHandlerUpdateServings(handler) {
+        this._parentElement.addEventListener("click", function(e) {
+            const btn = e.target.closest(".btn--tiny");
+        });
+    }
     _generateMarkup() {
         return `        
         <figure class="recipe__fig">
