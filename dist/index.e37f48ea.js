@@ -588,14 +588,15 @@ const controlPagination = function(goToPage) {
     // Render initial pagination buttons
     (0, _paginationViewJsDefault.default).render(_modelJs.state.search);
 };
-const controlServings = function() {
+const controlServings = function(newServings) {
     // update the recipe servings(in state)
-    _modelJs.updateServings(4);
+    _modelJs.updateServings(newServings);
     // update the recipe view
     (0, _recipeViewJsDefault.default).render(_modelJs.state.recipe);
 };
 const init = function() {
     (0, _recipeViewJsDefault.default).addHandlerRender(controlRecipes);
+    (0, _recipeViewJsDefault.default).addHandlerUpdateServings(controlServings);
     (0, _searchViewJsDefault.default).addHandlerSearch(controlSearchResults);
     (0, _paginationViewJsDefault.default).addHandlerClick(controlPagination);
 };
@@ -1743,7 +1744,8 @@ const state = {
         query: "",
         results: [],
         resultsPerPage: (0, _config.RES_PER_PAGE),
-        page: 1
+        page: 1,
+        servings: 0
     }
 };
 const loadRecipe = async function(id) {
@@ -1795,6 +1797,7 @@ const updateServings = function(newServings) {
     // newQTD =  oldQT * newServings / oldServings // 2 * 8 / 4 = 4
     });
     state.recipe.servings = newServings;
+    console.log(newServings);
 } // loadSearchResults('pizza')
 ;
 
@@ -2460,9 +2463,21 @@ class RecipeView extends (0, _viewDefault.default) {
     _parentElement = document.querySelector(".recipe");
     _errorMessage = "We couldn't find that recipe. Please try another one.";
     _message = "";
+    addHandlerRender(handler) {
+        const windowEvents = [
+            "hashchange",
+            "load"
+        ];
+        windowEvents.forEach((ev)=>window.addEventListener(ev, handler));
+    }
     addHandlerUpdateServings(handler) {
         this._parentElement.addEventListener("click", function(e) {
-            const btn = e.target.closest(".btn--tiny");
+            const btn = e.target.closest(".btn--update-servings");
+            console.log(btn);
+            if (!btn) return;
+            const updateTo = btn.dataset.updateTo;
+            console.log(updateTo);
+            handler(updateTo);
         });
     }
     _generateMarkup() {
@@ -2491,12 +2506,12 @@ class RecipeView extends (0, _viewDefault.default) {
             <span class="recipe__info-text">servings</span>
 
             <div class="recipe__info-buttons">
-              <button class="btn--tiny btn--increase-servings">
+              <button class="btn--tiny btn--update-servings"  data-update-to="${this._data.servings - 1}">
                 <svg>
                   <use href="${0, _iconsSvgDefault.default}#icon-minus-circle"></use>
                 </svg>
               </button>
-              <button class="btn--tiny btn--increase-servings">
+              <button class="btn--tiny btn--update-servings" data-update-to="${this._data.servings + 1}">
                 <svg>
                   <use href="${0, _iconsSvgDefault.default}#icon-plus-circle"></use>
                 </svg>
@@ -2555,13 +2570,6 @@ class RecipeView extends (0, _viewDefault.default) {
           ${ing.description}
         </div>
       </li>`;
-    }
-    addHandlerRender(handler) {
-        const windowEvents = [
-            "hashchange",
-            "load"
-        ];
-        windowEvents.forEach((ev)=>window.addEventListener(ev, handler));
     }
 }
 exports.default = new RecipeView();
@@ -2972,8 +2980,6 @@ class PaginationView extends (0, _viewDefault.default) {
     _generateMarkup() {
         const currentPage = this._data.page;
         const numPages = Math.ceil(this._data.results.length / this._data.resultsPerPage);
-        // console.log(numPages, 'Number of pages');
-        // console.log(currentPage, 'Actuall page');
         // Page 1, and there are other pages
         if (currentPage === 1 && numPages > 1) return `<button data-goto="${currentPage + 1}" class="btn--inline pagination__btn--next">
             <span>Page ${currentPage + 1}</span>

@@ -9,9 +9,20 @@ class RecipeView extends View {
   _errorMessage = "We couldn't find that recipe. Please try another one."
   _message = ''
 
+
+  addHandlerRender(handler) {
+    const windowEvents = ['hashchange', 'load']
+    windowEvents.forEach(ev => window.addEventListener(ev, handler))
+  }
+
   addHandlerUpdateServings(handler) {
-    this._parentElement.addEventListener('click', function(e) { 
-      const btn = e.target.closest('.btn--tiny')
+    this._parentElement.addEventListener('click', function (e) {
+      const btn = e.target.closest('.btn--update-servings')
+      console.log(btn);
+      if (!btn) return;
+      const  updateTo  = btn.dataset.updateTo;
+      console.log(updateTo);
+      handler(updateTo)
     })
   }
 
@@ -41,12 +52,12 @@ class RecipeView extends View {
             <span class="recipe__info-text">servings</span>
 
             <div class="recipe__info-buttons">
-              <button class="btn--tiny btn--increase-servings">
+              <button class="btn--tiny btn--update-servings"  data-update-to="${this._data.servings - 1}">
                 <svg>
                   <use href="${icons}#icon-minus-circle"></use>
                 </svg>
               </button>
-              <button class="btn--tiny btn--increase-servings">
+              <button class="btn--tiny btn--update-servings" data-update-to="${this._data.servings + 1}">
                 <svg>
                   <use href="${icons}#icon-plus-circle"></use>
                 </svg>
@@ -112,10 +123,6 @@ class RecipeView extends View {
       </li>`
   }
 
-  addHandlerRender(handler) {
-    const windowEvents = ['hashchange', 'load']
-    windowEvents.forEach(ev => window.addEventListener(ev, handler))
-  }
 
 }
 

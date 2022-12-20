@@ -8,7 +8,8 @@ export const state = {
     query: '',
     results: [],
     resultsPerPage: RES_PER_PAGE,
-    page: 1
+    page: 1,
+    servings: 0
   }
 }
 
@@ -73,5 +74,6 @@ export const updateServings = function (newServings) {
     // newQTD =  oldQT * newServings / oldServings // 2 * 8 / 4 = 4
   })
   state.recipe.servings = newServings;
+  console.log(newServings)
 }
 // loadSearchResults('pizza')

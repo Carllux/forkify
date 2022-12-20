@@ -9,8 +9,7 @@ class PaginationView extends View {
         const numPages = Math.ceil(
             this._data.results.length / this._data.resultsPerPage
         );
-        // console.log(numPages, 'Number of pages');
-        // console.log(currentPage, 'Actuall page');
+
 
 
         // Page 1, and there are other pages
