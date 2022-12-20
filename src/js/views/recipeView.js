@@ -20,9 +20,9 @@ class RecipeView extends View {
       const btn = e.target.closest('.btn--update-servings')
       console.log(btn);
       if (!btn) return;
-      const  updateTo  = btn.dataset.updateTo;
+      const updateTo = btn.dataset.updateTo;
       console.log(updateTo);
-      handler(updateTo)
+      if (updateTo > 0) handler(+updateTo)
     })
   }
 
