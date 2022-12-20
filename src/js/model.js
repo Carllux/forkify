@@ -74,6 +74,6 @@ export const updateServings = function (newServings) {
     // newQTD =  oldQT * newServings / oldServings // 2 * 8 / 4 = 4
   })
   state.recipe.servings = newServings;
-  console.log(newServings)
+  // console.log(newServings)
 }
 // loadSearchResults('pizza')

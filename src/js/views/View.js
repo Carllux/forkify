@@ -25,12 +25,45 @@ export default class View {
 
 
   render(data) {
-    if (!data || (Array.isArray(data) && data.length === 0)) return this.renderMessage();
+    if (!data || (Array.isArray(data) && data.length === 0))
+      return this.renderMessage();
 
     this._data = data;
     const markup = this._generateMarkup()
     this._clear();
     this._parentElement.insertAdjacentHTML('afterbegin', markup);
+  }
+
+  update(data) {
+    if (!data || (Array.isArray(data) && data.length === 0))
+      return this.renderMessage();
+
+    this._data = data;
+    const newMarkup = this._generateMarkup();
+
+    const newDOM = document.createRange().createContextualFragment(newMarkup);
+    const newElements = Array.from(newDOM.querySelectorAll('*'));
+    const curElements = Array.from(this._parentElement.querySelectorAll('*'));
+    console.log(curElements)
+    console.log(newElements)
+
+    newElements.forEach((newEl, ind) => {
+      const curEl = curElements[ind];
+
+      // updating elements that contains text nodes 
+      if (
+        !newEl.isEqualNode(curEl) &&
+        newEl.firstChild?.nodeValue.trim() !== '') {
+          // console.log('🤷‍♂️',newEl.firstChild.nodeValue.trim());
+        curEl.textContent = newEl.textContent;
+      };
+
+      // updating changed Attributes
+      if(!newEl.isEqualNode(curEl)) {
+    console.log(newEl.attributes);      
+      }
+    })
+
   }
 
   _clear() {

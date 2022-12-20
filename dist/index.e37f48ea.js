@@ -592,7 +592,8 @@ const controlServings = function(newServings) {
     // update the recipe servings(in state)
     _modelJs.updateServings(newServings);
     // update the recipe view
-    (0, _recipeViewJsDefault.default).render(_modelJs.state.recipe);
+    // recipeView.render(model.state.recipe)
+    (0, _recipeViewJsDefault.default).update(_modelJs.state.recipe);
 };
 const init = function() {
     (0, _recipeViewJsDefault.default).addHandlerRender(controlRecipes);
@@ -1797,7 +1798,7 @@ const updateServings = function(newServings) {
     // newQTD =  oldQT * newServings / oldServings // 2 * 8 / 4 = 4
     });
     state.recipe.servings = newServings;
-    console.log(newServings);
+// console.log(newServings)
 } // loadSearchResults('pizza')
 ;
 
@@ -2473,10 +2474,10 @@ class RecipeView extends (0, _viewDefault.default) {
     addHandlerUpdateServings(handler) {
         this._parentElement.addEventListener("click", function(e) {
             const btn = e.target.closest(".btn--update-servings");
-            console.log(btn);
+            // console.log(btn);
             if (!btn) return;
             const updateTo = btn.dataset.updateTo;
-            console.log(updateTo);
+            // console.log(updateTo);
             if (updateTo > 0) handler(+updateTo);
         });
     }
@@ -2642,6 +2643,24 @@ class View {
         const markup = this._generateMarkup();
         this._clear();
         this._parentElement.insertAdjacentHTML("afterbegin", markup);
+    }
+    update(data) {
+        if (!data || Array.isArray(data) && data.length === 0) return this.renderMessage();
+        this._data = data;
+        const newMarkup = this._generateMarkup();
+        const newDOM = document.createRange().createContextualFragment(newMarkup);
+        const newElements = Array.from(newDOM.querySelectorAll("*"));
+        const curElements = Array.from(this._parentElement.querySelectorAll("*"));
+        console.log(curElements);
+        console.log(newElements);
+        newElements.forEach((newEl, ind)=>{
+            const curEl = curElements[ind];
+            // updating elements that contains text nodes 
+            if (!newEl.isEqualNode(curEl) && newEl.firstChild?.nodeValue.trim() !== "") // console.log('🤷‍♂️',newEl.firstChild.nodeValue.trim());
+            curEl.textContent = newEl.textContent;
+            // updating changed Attributes
+            if (!newEl.isEqualNode(curEl)) console.log(newEl.attributes);
+        });
     }
     _clear() {
         this._parentElement.innerHTML = "";
