@@ -35,8 +35,8 @@ export default class View {
   }
 
   update(data) {
-    if (!data || (Array.isArray(data) && data.length === 0))
-      return this.renderMessage();
+    // if (!data || (Array.isArray(data) && data.length === 0))
+    //   return this.renderMessage();
 
     this._data = data;
     const newMarkup = this._generateMarkup();
@@ -54,14 +54,17 @@ export default class View {
       if (
         !newEl.isEqualNode(curEl) &&
         newEl.firstChild?.nodeValue.trim() !== '') {
-          // console.log('🤷‍♂️',newEl.firstChild.nodeValue.trim());
+        console.log('🤷‍♂️', newEl.firstChild.nodeValue.trim());
         curEl.textContent = newEl.textContent;
       };
 
       // updating changed Attributes
-      if(!newEl.isEqualNode(curEl)) {
-    console.log(newEl.attributes);      
+      if (!newEl.isEqualNode(curEl)) {
+        console.log(Array.from(newEl.attributes));
+        Array.from(newEl.attributes).forEach(attr => curEl.setAttribute(attr.name, attr.value));
       }
+
+
     })
 
   }

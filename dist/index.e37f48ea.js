@@ -553,6 +553,8 @@ const controlRecipes = async function() {
         if (!id) return;
         // rendering loading spinner
         (0, _recipeViewJsDefault.default).renderSpinner();
+        // Update results view to mark selectedd search results
+        (0, _resultsViewJsDefault.default).update(_modelJs.getSearchResultsPage());
         // loading recipe
         await _modelJs.loadRecipe(id);
         // rendering recipe
@@ -2645,7 +2647,8 @@ class View {
         this._parentElement.insertAdjacentHTML("afterbegin", markup);
     }
     update(data) {
-        if (!data || Array.isArray(data) && data.length === 0) return this.renderMessage();
+        // if (!data || (Array.isArray(data) && data.length === 0))
+        //   return this.renderMessage();
         this._data = data;
         const newMarkup = this._generateMarkup();
         const newDOM = document.createRange().createContextualFragment(newMarkup);
@@ -2656,10 +2659,15 @@ class View {
         newElements.forEach((newEl, ind)=>{
             const curEl = curElements[ind];
             // updating elements that contains text nodes 
-            if (!newEl.isEqualNode(curEl) && newEl.firstChild?.nodeValue.trim() !== "") // console.log('🤷‍♂️',newEl.firstChild.nodeValue.trim());
-            curEl.textContent = newEl.textContent;
+            if (!newEl.isEqualNode(curEl) && newEl.firstChild?.nodeValue.trim() !== "") {
+                console.log("\uD83E\uDD37‍♂️", newEl.firstChild.nodeValue.trim());
+                curEl.textContent = newEl.textContent;
+            }
             // updating changed Attributes
-            if (!newEl.isEqualNode(curEl)) console.log(newEl.attributes);
+            if (!newEl.isEqualNode(curEl)) {
+                console.log(Array.from(newEl.attributes));
+                Array.from(newEl.attributes).forEach((attr)=>curEl.setAttribute(attr.name, attr.value));
+            }
         });
     }
     _clear() {
@@ -2972,8 +2980,9 @@ class ResultsView extends (0, _viewDefault.default) {
         return this._data.map(this._generateMarkupPreview).join("");
     }
     _generateMarkupPreview(result) {
+        const id = window.location.hash.slice(1);
         return `<li class="preview">
-        <a class="preview__link" href="#${result.id}">
+        <a class="preview__link ${result.id === id ? "preview__link--active" : ""}" href="#${result.id}">
           <figure class="preview__fig">
             <img src="${result.image}" alt="Test" />
           </figure>
